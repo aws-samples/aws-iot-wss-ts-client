@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>AWS IoT Core - Websocket Example</title>
+
+    <style>
+		body {
+			font-family: 'Courier New', monospace;
+			background-color: #000;
+			color: #fff;
+			padding: 10px;
+            font-size: small;
+		}
+		.admin_text {
+			font-size: x-small;
+			color: rgb(120, 120, 120);
+
+
+		}
+
+		.data_field {
+
+			background-color: rgb(40, 40, 40);
+			margin-bottom: 20px;
+			padding: 20px;
+			font-size: 3vw;
+            overflow-wrap: anywhere;
+			border-radius: 5px;
+			
+		}
+
+
+		.data_field1 {
+			background-color:#4e09a3;
+           
+        }
+        .data_field2 {
+
+background-color:#8e006d;
+
+}
+
+
+
+		.data_field3 {
+			font-size: 5vw;
+			
+			background-color:rgb(32, 32, 32);
+		}
+
+		.form_field_box {
+			background-color: rgb(40, 40, 40);
+			padding: 20px;
+			font-size: 3vw;
+            overflow-wrap: anywhere;
+			border-radius: 5px;
+			margin-bottom: 20px;
+		}
+
+
+		.form_field_label {
+			background-color: rgb(57, 57, 57);
+			
+			margin-top: 10px;
+			padding: 10px;
+            overflow-wrap: anywhere;
+			border-radius: 5px;
+		}
+
+		
+		.form_field_dialog {
+			font-size: 2vw;
+			margin-top: 10px;
+			padding: 10px;
+            overflow-wrap: anywhere;
+			border-radius: 5px;
+			line-height: 150%;
+		}
+
+		.warning {
+			background-color: rgb(77, 65, 0);
+		}
+
+		.focus {
+			background-color: rgb(0, 0, 0);
+			padding: 1px 10px 1px 10px;
+			margin: 0px 2px 0px 2px;
+			border-radius: 3px;
+		}
+
+		.error {
+			background-color: rgb(83, 11, 0);
+		}
+
+
+		
+		.inputparam {
+			font-family: 'Courier New', monospace;
+			background-color: rgb(32, 32, 32);
+			border: 1px solid rgb(80, 80, 80);
+			padding: 15px;
+			margin: 15px;
+			border-radius: 5px;
+			color: #fff;
+			width: 90%;
+			overflow-wrap: anywhere;
+		}
+
+
+		.inputkey {
+			font-family: 'Courier New', monospace;
+			background-color: rgb(32, 32, 32);
+			border: 1px solid rgb(80, 80, 80);
+			padding: 15px;
+			margin: 15px;
+			border-radius: 5px;
+			color: #fff;
+			width: 90%;
+			overflow-wrap: anywhere;
+		}
+
+		.button {
+			/* font-family: monospace;
+			border: none;
+			color: white;
+			padding: 15px 30px;
+			text-align: center;
+			text-decoration: none;
+			display: inline-block;
+			font-size: 2vw;
+			margin: 10px;
+			cursor: pointer;
+			border-radius: 10px;
+			width: 100%;
+			border: 1px solid #000; */
+
+			background-color: rgb(57, 57, 57);
+			margin-top: 10px;
+			padding: 20px;
+            /* overflow-wrap: anywhere; */
+			text-align: center;
+			cursor: pointer;
+			border-radius: 5px;
+		
+			
+		
+		}
+
+		.button_purpule {
+			background-color: #4902a1;
+			border: 1px solid #23024c;
+		}
+		
+		.button_black {
+			background-color: #000;
+		}
+
+		.badgepic {
+
+			border: 2px solid rgb(63, 63, 63);
+			padding: 0px;
+			margin: 0px;
+			/* border-radius: 50%; */
+			/* margin-top: -10px;
+			margin-left: -10px; */
+		}
+		
+		a {
+  color: white;
+}
+
+
+		</style>
+
+		
+</head>
+
+<body>
+
+    <h1>AWS IoT Core - Websocket Example</h1>
+
+	<div id="form_field_settings_dialog" style="display: none">&nbsp;</div>
+
+	<div id="form_field_settings_form">
+
+
+		<div class="form_field_label" id="form_field_label_accessKeyId">clientId: 
+			<div>
+				<input class="inputkey" type="text" id="form_field_clientId" name="form_field_clientId" value="MyClientID-EXAMPLE">
+			</div>
+		</div>
+		
+
+		<div class="form_field_label" id="form_field_label_accessKeyId">accessKeyId: 
+			<div>
+				<input class="inputkey" type="text" id="form_field_accessKeyId" name="form_field_accessKeyId" value="ASIAYLBBBEXAMPLE">
+			</div>
+		</div>
+		
+		<div class="form_field_label" id="form_field_label_secretAccessKey">secretAccessKey: 
+			<div>
+				<input class="inputkey" type="password" id="form_field_secretAccessKey" name="form_field_secretAccessKey" value="V4BKJ8GSOBeODaaGEXAMPLE">
+			</div>
+		</div>
+		
+		<div class="form_field_label" id="form_field_label_sessionToken">sessionToken (optional): 
+			<div>
+				<!-- <input class="inputkey" type="textfield" id="form_field_sessionToken" name="form_field_sessionToken" value=""> -->
+				<textarea class="inputkey" id="form_field_sessionToken" rows="5" cols="64" name="form_field_sessionToken">IQoJb3JpZ2luX2VjEKD//////EXAMPLE</textarea>
+			</div>
+		</div>
+
+		<div class="form_field_label" id="form_field_label_region">region: 
+			<div>
+			<input class="inputparam" type="text" id="form_field_region" name="form_field_region" value="eu-west-1">
+			</div>
+		</div>
+		
+		<div class="form_field_label" id="form_field_label_endpoint">endpoint: 
+			<div>
+			<input class="inputparam" type="text" id="form_field_endpoint" name="form_field_endpoint" value="EXAMPLE-ats.iot.eu-west-1.amazonaws.com">
+			</div>
+		</div>
+
+			
+		<div class="form_field_label" id="form_field_label_topic">topic to subscribe: 
+			<div>
+			<input class="inputparam" type="text" id="form_field_topic" name="form_field_topic" value="test/test">
+			</div>
+		</div>
+
+
+		<div class="button button_purpule" id="connet_button">CONNECT USING WSS</div>
+	</div>
+	
+
+
+	<div id="incomingData"></div>
+</body>
+</html>
