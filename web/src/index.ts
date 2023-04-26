@@ -83,8 +83,10 @@ function startSession() {
   var signature = SigV4Utils.sign(signingKey, stringToSign);
   // Append signature to message
   canonicalQuerystring += '&X-Amz-Signature=' + signature;
-  // Append existing security token to the request (since we are using STS credetials)
-  canonicalQuerystring += '&X-Amz-Security-Token=' + encodeURIComponent(applicationData.sessionToken);
+  // Append existing security token to the request (since we are using STS credetials) or do nothing if using IAM credentials
+  if (applicationData.sessionToken !== "") {
+    canonicalQuerystring += '&X-Amz-Security-Token=' + encodeURIComponent(applicationData.sessionToken);  
+  } 
   var requestUrl = 'wss://' + host + canonicalUri + '?' + canonicalQuerystring;
   console.log(requestUrl);
 
